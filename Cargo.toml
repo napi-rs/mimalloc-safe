@@ -1,12 +1,12 @@
 [package]
-name = "mimalloc"
+name = "mimalloc2"
 version = "0.1.43"
 authors = [
     "Octavian Oncescu <octavonce@gmail.com>",
     "Vincent Rouillé <vincent@speedy37.fr>",
     "Thom Chiovoloni <chiovolonit@gmail.com>",
 ]
-edition = "2018"
+edition = "2021"
 repository = "https://github.com/purpleprotocol/mimalloc_rust"
 keywords = ["mimalloc", "allocator", "encrypted-heap", "performance"]
 categories = ["memory-management", "api-bindings"]
@@ -21,14 +21,14 @@ members = ["libmimalloc-sys", "libmimalloc-sys/sys-test"]
 travis-ci = { repository = "purpleprotocol/mimalloc_rust" }
 
 [dependencies]
-libmimalloc-sys = { path = "libmimalloc-sys", version = "0.1.39", default-features = false }
+libmimalloc-sys2 = { path = "libmimalloc-sys", version = "0.1.39", default-features = false }
 
 [features]
 default = []
-secure = ["libmimalloc-sys/secure"]
-override = ["libmimalloc-sys/override"]
-debug = ["libmimalloc-sys/debug"]
-debug_in_debug = ["libmimalloc-sys/debug_in_debug"]
-local_dynamic_tls = ["libmimalloc-sys/local_dynamic_tls"]
-no_thp = ["libmimalloc-sys/no_thp"]
-extended = ["libmimalloc-sys/extended"]
+secure = ["libmimalloc-sys2/secure"]
+override = ["libmimalloc-sys2/override"]
+debug = ["libmimalloc-sys2/debug"]
+debug_in_debug = ["libmimalloc-sys2/debug_in_debug"]
+local_dynamic_tls = ["libmimalloc-sys2/local_dynamic_tls"]
+no_thp = ["libmimalloc-sys2/no_thp"]
+extended = ["libmimalloc-sys2/extended"]

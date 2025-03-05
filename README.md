@@ -1,5 +1,7 @@
 # Mimalloc Rust
 
+Forked from https://github.com/purpleprotocol/mimalloc_rust
+
 [![Latest Version]][crates.io] [![Documentation]][docs.rs]
 
 A drop-in global allocator wrapper around the [mimalloc](https://github.com/microsoft/mimalloc) allocator.
@@ -16,7 +18,7 @@ static GLOBAL: MiMalloc = MiMalloc;
 
 ## Requirements
 
-A __C__ compiler is required for building [mimalloc](https://github.com/microsoft/mimalloc) with cargo.
+A **C** compiler is required for building [mimalloc](https://github.com/microsoft/mimalloc) with cargo.
 
 ## Usage with secure mode
 

@@ -25,7 +25,7 @@
 //! mimalloc = { version = "*", features = ["secure"] }
 //! ```
 
-extern crate libmimalloc_sys as ffi;
+extern crate libmimalloc_sys2 as ffi;
 
 #[cfg(feature = "extended")]
 mod extended;

@@ -8,7 +8,7 @@ license = "MIT"
 publish = false
 
 [dependencies]
-libmimalloc-sys = { path = "..", features = ["extended"] }
+libmimalloc-sys2 = { path = "..", features = ["extended"] }
 libc = "0.2"
 
 [build-dependencies]
