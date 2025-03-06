@@ -1,4 +1,4 @@
-# `mimalloc-rs`
+# `mimalloc-safe`
 
 Forked from https://github.com/purpleprotocol/mimalloc_rust
 
@@ -34,7 +34,7 @@ To enable secure mode, put in `Cargo.toml`:
 mimalloc-rs = { version = "*", features = ["secure"] }
 ```
 
-[crates.io]: https://crates.io/crates/mimalloc-rs
-[Latest Version]: https://img.shields.io/crates/v/mimalloc-rs.svg
-[Documentation]: https://docs.rs/mimalloc-rs/badge.svg
-[docs.rs]: https://docs.rs/mimalloc-rs
+[crates.io]: https://crates.io/crates/mimalloc-safe
+[Latest Version]: https://img.shields.io/crates/v/mimalloc-safe.svg
+[Documentation]: https://docs.rs/mimalloc-safe/badge.svg
+[docs.rs]: https://docs.rs/mimalloc-safe
