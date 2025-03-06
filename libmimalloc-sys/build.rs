@@ -1,59 +1,106 @@
+use std::borrow::Cow;
 use std::env;
 
-fn main() {
-    let mut build = cc::Build::new();
+use cmake::Config;
 
-    build.include("c_src/mimalloc/include");
-    build.include("c_src/mimalloc/src");
-    build.file("c_src/mimalloc/src/static.c");
+fn main() {
+    let mut cmake_config = Config::new("c_src/mimalloc");
+
+    let mut mimalloc_base_name = Cow::Borrowed("mimalloc");
+
+    cmake_config
+        .define("MI_BUILD_STATIC", "ON")
+        .define("MI_BUILD_OBJECT", "OFF")
+        .define("MI_BUILD_SHARED", "OFF")
+        .define("MI_BUILD_TESTS", "OFF");
 
     let target_os = env::var("CARGO_CFG_TARGET_OS").expect("target_os not defined!");
-    let target_family = env::var("CARGO_CFG_TARGET_FAMILY").expect("target_family not defined!");
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").expect("target_arch not defined!");
+    let target_env = env::var("CARGO_CFG_TARGET_ENV").expect("target_env not defined!");
+    let profile = env::var("PROFILE").expect("profile not defined!");
 
     if env::var_os("CARGO_FEATURE_OVERRIDE").is_some() {
-        // Overriding malloc is only available on windows in shared mode, but we
-        // only ever build a static lib.
-        if target_family != "windows" {
-            build.define("MI_MALLOC_OVERRIDE", None);
-        }
+        cmake_config.define("MI_OVERRIDE", "ON");
+    } else {
+        cmake_config.define("MI_OVERRIDE", "OFF");
+    }
+
+    if env::var_os("CARGO_FEATURE_SKIP_COLLECT_ON_EXIT").is_some() {
+        cmake_config.define("MI_SKIP_COLLECT_ON_EXIT", "ON");
+    }
+
+    if target_os == "windows" {
+        mimalloc_base_name = Cow::Owned(format!("{}-static", mimalloc_base_name));
     }
 
     if env::var_os("CARGO_FEATURE_SECURE").is_some() {
-        build.define("MI_SECURE", "4");
+        cmake_config.define("MI_SECURE", "ON");
+        mimalloc_base_name = Cow::Owned(format!("{}-secure", mimalloc_base_name));
+    }
+
+    if env::var_os("CARGO_FEATURE_ETW").is_some() {
+        cmake_config.define("MI_TRACK_ETW", "ON");
+    }
+
+    if profile == "debug" {
+        cmake_config
+            .define("MI_DEBUG_FULL", "ON")
+            .define("MI_SHOW_ERRORS", "ON");
+        mimalloc_base_name = Cow::Owned(format!("{}-debug", mimalloc_base_name));
+    }
+
+    if target_env == "musl" {
+        cmake_config.define("MI_LIBC_MUSL", "1");
     }
 
     let dynamic_tls = env::var("CARGO_FEATURE_LOCAL_DYNAMIC_TLS").is_ok();
 
-    if target_family == "unix" && target_os != "haiku" {
-        if dynamic_tls {
-            build.flag_if_supported("-ftls-model=local-dynamic");
-        } else {
-            build.flag_if_supported("-ftls-model=initial-exec");
-        }
+    if dynamic_tls {
+        cmake_config.define("MI_LOCAL_DYNAMIC_TLS", "ON");
     }
 
     if (target_os == "linux" || target_os == "android")
         && env::var_os("CARGO_FEATURE_NO_THP").is_some()
     {
-        build.define("MI_NO_THP", "1");
+        cmake_config.define("MI_NO_THP", "1");
     }
 
     if env::var_os("CARGO_FEATURE_DEBUG").is_some()
         || (env::var_os("CARGO_FEATURE_DEBUG_IN_DEBUG").is_some() && cfg!(debug_assertions))
     {
-        build.define("MI_DEBUG", "3");
-        build.define("MI_SHOW_ERRORS", "1");
+        cmake_config.define("MI_DEBUG_FULL", "ON");
+        cmake_config.define("MI_SHOW_ERRORS", "ON");
     } else {
         // Remove heavy debug assertions etc
-        build.define("MI_DEBUG", "0");
+        cmake_config.define("MI_DEBUG_FULL", "OFF");
     }
 
-    if build.get_compiler().is_like_msvc() {
-        build.cpp(true);
+    if target_env == "msvc" {
+        cmake_config.define("MI_USE_CXX", "ON");
+        if profile == "debug" {
+            println!("cargo:rustc-link-lib=ucrtd");
+        } else {
+            println!("cargo:rustc-link-lib=ucrt");
+        }
     }
 
-    build.compile("mimalloc");
+    let dst = cmake_config.build();
+
+    if target_os == "windows" {
+        println!(
+            "cargo:rustc-link-search=native={}/build/{}",
+            dst.display(),
+            if profile == "debug" {
+                "Debug"
+            } else {
+                "Release"
+            }
+        );
+    } else {
+        println!("cargo:rustc-link-search=native={}/build", dst.display());
+    }
+
+    println!("cargo:rustc-link-lib=static={}", mimalloc_base_name);
 
     // on armv6 we need to link with libatomic
     if target_os == "linux" && target_arch == "arm" {
