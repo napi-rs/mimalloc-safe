@@ -7,6 +7,10 @@ description = "Bindings test for libmimalloc-sys"
 license = "MIT"
 publish = false
 
+[features]
+secure = ["libmimalloc-sys2/secure"]
+extended = ["libmimalloc-sys2/extended"]
+
 [dependencies]
 libmimalloc-sys2 = { path = "..", features = ["extended"] }
 libc = "0.2"

@@ -100,4 +100,4 @@ jobs:
         run: cargo rustdoc -- -D warnings
 
       - name: 'Check documentation links in `libmimalloc-sys`'
-        run: cargo rustdoc -p libmimalloc-sys -- -D warnings
+        run: cargo rustdoc -p libmimalloc-sys2 -- -D warnings
