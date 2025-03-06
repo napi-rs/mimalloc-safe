@@ -1,4 +1,4 @@
-# Mimalloc Rust
+# `mimalloc-rs`
 
 Forked from https://github.com/purpleprotocol/mimalloc_rust
 
@@ -10,7 +10,7 @@ Mimalloc is a general purpose, performance oriented allocator built by Microsoft
 ## Usage
 
 ```rust
-use mimalloc::MiMalloc;
+use mimalloc_rs::MiMalloc;
 
 #[global_allocator]
 static GLOBAL: MiMalloc = MiMalloc;
@@ -31,10 +31,10 @@ To enable secure mode, put in `Cargo.toml`:
 
 ```ini
 [dependencies]
-mimalloc = { version = "*", features = ["secure"] }
+mimalloc-rs = { version = "*", features = ["secure"] }
 ```
 
-[crates.io]: https://crates.io/crates/mimalloc
-[Latest Version]: https://img.shields.io/crates/v/mimalloc.svg
-[Documentation]: https://docs.rs/mimalloc/badge.svg
-[docs.rs]: https://docs.rs/mimalloc
+[crates.io]: https://crates.io/crates/mimalloc-rs
+[Latest Version]: https://img.shields.io/crates/v/mimalloc-rs.svg
+[Documentation]: https://docs.rs/mimalloc-rs/badge.svg
+[docs.rs]: https://docs.rs/mimalloc-rs
