@@ -174,6 +174,7 @@ jobs:
           yarn install
 
       - name: Install wasi-sdk
+        if: ${{ matrix.settings.target == 'wasm32-wasip1-threads' }}
         run: |
           mkdir -p $HOME/wasi-sdk
           curl -L https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-25/wasi-sdk-25.0-x86_64-linux.tar.gz | tar -xzf - -C $HOME/wasi-sdk --strip-components=1
@@ -195,3 +196,9 @@ jobs:
             yarn build --target ${{ matrix.settings.target }}
             yarn build --target ${{ matrix.settings.target }} --release
           fi
+      - name: Build with static CRT
+        if: ${{ matrix.settings.target == 'x86_64-pc-windows-msvc' }}
+        working-directory: example
+        run: yarn build --target ${{ matrix.settings.target }} --release
+        env:
+          RUSTFLAGS: "-C target-feature=+crt-static -C link-arg=/FORCE:MULTIPLE"
