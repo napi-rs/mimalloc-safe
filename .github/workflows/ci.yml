@@ -2,6 +2,8 @@ name: CI
 
 on:
   push:
+    branches:
+      - main
   pull_request:
   # Run daily to catch when Rust updates cause problems to happen.
   schedule:
@@ -102,3 +104,94 @@ jobs:
 
       - name: 'Check documentation links in `libmimalloc-sys`'
         run: cargo rustdoc -p libmimalloc-sys2 -- -D warnings
+
+  build-example:
+    name: Build example ${{ matrix.settings.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        settings:
+          - host: macos-latest
+            target: x86_64-apple-darwin
+          - host: windows-latest
+            target: x86_64-pc-windows-msvc
+          - host: windows-latest
+            target: i686-pc-windows-msvc
+          - host: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+          - host: macos-latest
+            target: aarch64-apple-darwin
+          - host: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: armv7-unknown-linux-gnueabihf
+          - host: ubuntu-latest
+            target: aarch64-linux-android
+          - host: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-musl
+          - host: windows-latest
+            target: aarch64-pc-windows-msvc
+          - host: ubuntu-latest
+            target: powerpc64le-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: s390x-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: wasm32-wasip1-threads
+
+    runs-on: ${{ matrix.settings.host }}
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install
+        run: rustup target add ${{ matrix.settings.target }}
+
+      - uses: goto-bus-stop/setup-zig@v2
+        if: ${{ contains(matrix.settings.target, 'musl') }}
+        with:
+          version: 0.14.0
+      
+      - name: Install cargo-zigbuild
+        uses: taiki-e/install-action@v2
+        if: ${{ contains(matrix.settings.target, 'musl') }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tool: cargo-zigbuild
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        working-directory: example
+        run: |
+          corepack enable
+          yarn install
+
+      - name: Install wasi-sdk
+        run: |
+          mkdir -p $HOME/wasi-sdk
+          curl -L https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-25/wasi-sdk-25.0-x86_64-linux.tar.gz | tar -xzf - -C $HOME/wasi-sdk --strip-components=1
+          echo "WASI_SDK_PATH=$HOME/wasi-sdk" >> $GITHUB_ENV
+
+      - name: Build
+        working-directory: example
+        shell: bash
+        run: |
+          if [[ "${{ matrix.settings.target }}" == *"musl"* ]]; then
+            yarn build --target ${{ matrix.settings.target }} -x
+            yarn build --target ${{ matrix.settings.target }} -x --release
+          elif [[ "${{ matrix.settings.target }}" == *"gnu"* ]]; then
+            export CFLAGS="-fuse-ld=lld"
+            export CC=clang
+            yarn build --target ${{ matrix.settings.target }} --use-napi-cross
+            yarn build --target ${{ matrix.settings.target }} --use-napi-cross --release
+          else
+            yarn build --target ${{ matrix.settings.target }}
+            yarn build --target ${{ matrix.settings.target }} --release
+          fi

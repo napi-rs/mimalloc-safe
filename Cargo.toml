@@ -16,7 +16,7 @@ license = "MIT"
 readme = "README.md"
 
 [workspace]
-members = ["libmimalloc-sys", "libmimalloc-sys/sys-test"]
+members = ["libmimalloc-sys", "libmimalloc-sys/sys-test", "example"]
 
 [badges]
 travis-ci = { repository = "purpleprotocol/mimalloc_rust" }
