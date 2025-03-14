@@ -1,0 +1,11 @@
+{
+  "name": "mimalloc-example",
+  "private": true,
+  "scripts": {
+    "build": "napi build"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "canary"
+  },
+  "packageManager": "yarn@4.7.0"
+}

@@ -75,8 +75,14 @@ fn main() {
         cmake_config.define("MI_DEBUG_FULL", "OFF");
     }
 
+    if target_arch == "aarch64" && target_env == "musl" {
+        cmake_config.define("MI_OPT_ARCH", "OFF");
+    }
+
     if target_env == "msvc" {
-        cmake_config.define("MI_USE_CXX", "ON");
+        cmake_config
+            .define("MI_USE_CXX", "ON")
+            .define("MI_WIN_USE_FIXED_TLS", "ON");
         if profile == "debug" {
             println!("cargo:rustc-link-lib=ucrtd");
         } else {

@@ -1,0 +1,20 @@
+[package]
+name = "mimalloc_example"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+napi = "3.0.0-alpha"
+napi-derive = "3.0.0-alpha"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+mimalloc-safe = { path = "../", features = ["local_dynamic_tls", "skip_collect_on_exit"] }
+
+[target.'cfg(not(target_os = "linux"))'.dependencies]
+mimalloc-safe = { path = "../", features = ["skip_collect_on_exit"] }
+
+[build-dependencies]
+napi-build = "2"
