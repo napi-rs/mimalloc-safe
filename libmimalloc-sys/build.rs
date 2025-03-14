@@ -83,10 +83,15 @@ fn main() {
         cmake_config
             .define("MI_USE_CXX", "ON")
             .define("MI_WIN_USE_FIXED_TLS", "ON");
-        if profile == "debug" {
-            println!("cargo:rustc-link-lib=ucrtd");
-        } else {
-            println!("cargo:rustc-link-lib=ucrt");
+        if !std::env::var("CARGO_CFG_TARGET_FEATURE")
+            .map(|s| s.contains("+crt-static"))
+            .unwrap_or(false)
+        {
+            if profile == "debug" {
+                println!("cargo:rustc-link-lib=ucrtd");
+            } else {
+                println!("cargo:rustc-link-lib=ucrt");
+            }
         }
     }
 
