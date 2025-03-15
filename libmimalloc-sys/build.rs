@@ -42,7 +42,8 @@ fn main() {
         cmake_config.define("MI_TRACK_ETW", "ON");
     }
 
-    if profile == "debug" {
+    // it's complicated to link ucrt in debug mode on windows
+    if profile == "debug" && target_env != "msvc" {
         cmake_config
             .define("MI_DEBUG_FULL", "ON")
             .define("MI_SHOW_ERRORS", "ON");
@@ -82,31 +83,22 @@ fn main() {
     if target_env == "msvc" {
         cmake_config
             .define("MI_USE_CXX", "ON")
-            .define("MI_WIN_USE_FIXED_TLS", "ON");
-        if !std::env::var("CARGO_CFG_TARGET_FEATURE")
-            .map(|s| s.contains("+crt-static"))
-            .unwrap_or(false)
-        {
-            if profile == "debug" {
-                println!("cargo:rustc-link-lib=ucrtd");
-            } else {
-                println!("cargo:rustc-link-lib=ucrt");
-            }
-        }
+            .define("MI_WIN_USE_FIXED_TLS", "ON")
+            // always turn off debug full and show errors on msvc
+            .define("MI_DEBUG_FULL", "OFF")
+            .define("MI_SHOW_ERRORS", "OFF")
+            .profile("release")
+            .static_crt(true);
     }
 
     let dst = cmake_config.build();
 
     if target_os == "windows" {
         println!(
-            "cargo:rustc-link-search=native={}/build/{}",
+            "cargo:rustc-link-search=native={}/build/Release",
             dst.display(),
-            if profile == "debug" {
-                "Debug"
-            } else {
-                "Release"
-            }
         );
+        println!("cargo:rustc-link-search=native={}/build", dst.display());
     } else {
         println!("cargo:rustc-link-search=native={}/build", dst.display());
     }

@@ -196,9 +196,3 @@ jobs:
             yarn build --target ${{ matrix.settings.target }}
             yarn build --target ${{ matrix.settings.target }} --release
           fi
-      - name: Build with static CRT
-        if: ${{ matrix.settings.target == 'x86_64-pc-windows-msvc' }}
-        working-directory: example
-        run: yarn build --target ${{ matrix.settings.target }} --release
-        env:
-          RUSTFLAGS: "-C target-feature=+crt-static -C link-arg=/FORCE:MULTIPLE"
