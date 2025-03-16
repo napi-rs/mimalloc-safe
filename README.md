@@ -10,7 +10,7 @@ Mimalloc is a general purpose, performance oriented allocator built by Microsoft
 ## Usage
 
 ```rust
-use mimalloc_rs::MiMalloc;
+use mimalloc_safe::MiMalloc;
 
 #[global_allocator]
 static GLOBAL: MiMalloc = MiMalloc;
@@ -31,7 +31,7 @@ To enable secure mode, put in `Cargo.toml`:
 
 ```ini
 [dependencies]
-mimalloc-rs = { version = "*", features = ["secure"] }
+mimalloc-safe = { version = "*", features = ["secure"] }
 ```
 
 [crates.io]: https://crates.io/crates/mimalloc-safe
