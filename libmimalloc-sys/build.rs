@@ -29,10 +29,6 @@ fn main() {
         cmake_config.define("MI_SKIP_COLLECT_ON_EXIT", "ON");
     }
 
-    if target_os == "windows" {
-        mimalloc_base_name = Cow::Owned(format!("{}-static", mimalloc_base_name));
-    }
-
     if env::var_os("CARGO_FEATURE_SECURE").is_some() {
         cmake_config.define("MI_SECURE", "ON");
         mimalloc_base_name = Cow::Owned(format!("{}-secure", mimalloc_base_name));
@@ -51,7 +47,14 @@ fn main() {
     }
 
     if target_env == "musl" {
-        cmake_config.define("MI_LIBC_MUSL", "1");
+        cmake_config
+            .define("MI_LIBC_MUSL", "ON")
+            .cflag("-Wno-error=date-time");
+        if target_arch == "aarch64" {
+            cmake_config
+                .define("MI_OPT_ARCH", "OFF")
+                .define("MI_NO_OPT_ARCH", "ON");
+        }
     }
 
     let dynamic_tls = env::var("CARGO_FEATURE_LOCAL_DYNAMIC_TLS").is_ok();
@@ -76,19 +79,14 @@ fn main() {
         cmake_config.define("MI_DEBUG_FULL", "OFF");
     }
 
-    if target_arch == "aarch64" && target_env == "musl" {
-        cmake_config.define("MI_OPT_ARCH", "OFF");
-    }
-
     if target_env == "msvc" {
         cmake_config
             .define("MI_USE_CXX", "ON")
-            .define("MI_WIN_USE_FIXED_TLS", "ON")
             // always turn off debug full and show errors on msvc
             .define("MI_DEBUG_FULL", "OFF")
             .define("MI_SHOW_ERRORS", "OFF")
             .profile("release")
-            .static_crt(true);
+            .static_crt(false);
     }
 
     let dst = cmake_config.build();

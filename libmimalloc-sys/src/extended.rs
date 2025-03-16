@@ -545,8 +545,53 @@ pub const mi_option_max_warnings: mi_option_t = 20;
 /// Option (experimental)
 pub const mi_option_max_segment_reclaim: mi_option_t = 21;
 
+/// Option (experimental)
+pub const mi_option_destroy_on_exit: mi_option_t = 22;
+
+/// Option (experimental)
+pub const mi_option_arena_reserve: mi_option_t = 23;
+
+/// Option (experimental)
+pub const mi_option_arena_purge_mult: mi_option_t = 24;
+
+/// Option (experimental)
+pub const mi_option_purge_extend_delay: mi_option_t = 25;
+
+/// Option (experimental)
+pub const mi_option_abandoned_reclaim_on_free: mi_option_t = 26;
+
+/// Option (experimental)
+pub const mi_option_disallow_arena_alloc: mi_option_t = 27;
+
+/// Option (experimental)
+pub const mi_option_retry_on_oom: mi_option_t = 28;
+
+/// Option (experimental)
+pub const mi_option_visit_abandoned: mi_option_t = 29;
+
+/// Option (experimental)
+pub const mi_option_guarded_min: mi_option_t = 30;
+
+/// Option (experimental)
+pub const mi_option_guarded_max: mi_option_t = 31;
+
+/// Option (experimental)
+pub const mi_option_guarded_precise: mi_option_t = 32;
+
+/// Option (experimental)
+pub const mi_option_guarded_sample_rate: mi_option_t = 33;
+
+/// Option (experimental)
+pub const mi_option_guarded_sample_seed: mi_option_t = 34;
+
+/// Option (experimental)
+pub const mi_option_target_segments_per_thread: mi_option_t = 35;
+
+/// Option (experimental)
+pub const mi_option_generic_collect: mi_option_t = 36;
+
 /// Last option.
-pub const _mi_option_last: mi_option_t = 36;
+pub const _mi_option_last: mi_option_t = 37;
 
 extern "C" {
     // Note: mi_option_{enable,disable} aren't exposed because they're redundant
