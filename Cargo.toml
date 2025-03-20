@@ -8,7 +8,7 @@ authors = [
     "Long Yinan <lynweklm@gmail.com>"
 ]
 edition = "2021"
-repository = "https://github.com/purpleprotocol/mimalloc_rust"
+repository = "https://github.com/napi-rs/mimalloc-safe"
 keywords = ["mimalloc", "allocator", "encrypted-heap", "performance"]
 categories = ["memory-management", "api-bindings"]
 description = "Performance and security oriented drop-in allocator"
