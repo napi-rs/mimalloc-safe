@@ -38,6 +38,10 @@ fn main() {
         cmake_config.define("MI_TRACK_ETW", "ON");
     }
 
+    if env::var_os("CARGO_FEATURE_NO_OPT_ARCH").is_some() {
+        cmake_config.define("MI_OPT_ARCH", "OFF");
+    }
+
     // it's complicated to link ucrt in debug mode on windows
     if profile == "debug" && target_env != "msvc" {
         cmake_config
