@@ -91,6 +91,14 @@ fn main() {
             .define("MI_SHOW_ERRORS", "OFF")
             .profile("release")
             .static_crt(false);
+        // Link with libs needed on Windows
+        // https://github.com/microsoft/mimalloc/blob/af21001f7a65eafb8fb16460b018ebf9d75e2ad8/CMakeLists.txt#L487
+        // https://github.com/rust-lang/rust/issues/139352
+        let libs = ["psapi", "shell32", "user32", "advapi32", "bcrypt"];
+
+        for lib in libs {
+            println!("cargo:rustc-link-lib={}", lib);
+        }
     }
 
     let dst = cmake_config.build();
