@@ -1,6 +1,6 @@
 [package]
 name = "libmimalloc-sys2"
-version = "0.1.47"
+version = "0.1.48"
 authors = ["Octavian Oncescu <octavonce@gmail.com>", "Long Yinan <lynweklm@gmail.com>"]
 edition = "2018"
 repository = "https://github.com/napi-rs/mimalloc-safe/tree/master/libmimalloc-sys"
