@@ -19,10 +19,19 @@ fn main() {
     let target_env = env::var("CARGO_CFG_TARGET_ENV").expect("target_env not defined!");
     let profile = env::var("PROFILE").expect("profile not defined!");
 
+    if target_os == "windows" && target_env == "msvc" {
+        build_mimalloc_win();
+        return;
+    }
+
     if env::var_os("CARGO_FEATURE_OVERRIDE").is_some() {
         cmake_config.define("MI_OVERRIDE", "ON");
     } else {
         cmake_config.define("MI_OVERRIDE", "OFF");
+    }
+
+    if env::var_os("CARGO_FEATURE_ASM").is_some() {
+        cmake_config.define("MI_SEE_ASM", "ON");
     }
 
     if env::var_os("CARGO_FEATURE_SKIP_COLLECT_ON_EXIT").is_some() {
@@ -42,8 +51,7 @@ fn main() {
         cmake_config.define("MI_OPT_ARCH", "OFF");
     }
 
-    // it's complicated to link ucrt in debug mode on windows
-    if profile == "debug" && target_env != "msvc" {
+    if profile == "debug" {
         cmake_config
             .define("MI_DEBUG_FULL", "ON")
             .define("MI_SHOW_ERRORS", "ON");
@@ -83,27 +91,9 @@ fn main() {
         cmake_config.define("MI_DEBUG_FULL", "OFF");
     }
 
-    if target_env == "msvc" {
-        cmake_config
-            .define("MI_USE_CXX", "ON")
-            // always turn off debug full and show errors on msvc
-            .define("MI_DEBUG_FULL", "OFF")
-            .define("MI_SHOW_ERRORS", "OFF")
-            .profile("release")
-            .static_crt(false);
-    }
-
     let dst = cmake_config.build();
 
-    if target_os == "windows" {
-        println!(
-            "cargo:rustc-link-search=native={}/build/Release",
-            dst.display(),
-        );
-        println!("cargo:rustc-link-search=native={}/build", dst.display());
-    } else {
-        println!("cargo:rustc-link-search=native={}/build", dst.display());
-    }
+    println!("cargo:rustc-link-search=native={}/build", dst.display());
 
     println!("cargo:rustc-link-lib=static={}", mimalloc_base_name);
 
@@ -115,4 +105,69 @@ fn main() {
         let atomic_name = env::var("DEP_ATOMIC").unwrap_or("atomic".to_owned());
         println!("cargo:rustc-link-lib={}", atomic_name);
     }
+}
+
+fn build_mimalloc_win() {
+    use std::env;
+
+    let features = env::var("CARGO_CFG_TARGET_FEATURE")
+        .map(|features| {
+            features
+                .split(",")
+                .map(|f| f.to_owned())
+                .collect::<Vec<String>>()
+        })
+        .unwrap_or_default();
+
+    let mut build = cc::Build::new();
+    let target_arch = env::var("CARGO_CFG_TARGET_ARCH").expect("target_arch not defined!");
+
+    build
+        .include("./c_src/mimalloc/include")
+        .include("./c_src/mimalloc/src")
+        .file("./c_src/mimalloc/src/static.c")
+        .define("MI_BUILD_SHARED", "0")
+        .cpp(false)
+        .warnings(false)
+        .flag_if_supported("-w");
+
+    if env::var_os("CARGO_FEATURE_SECURE").is_some() {
+        build.define("MI_SECURE", "4");
+    }
+
+    if env::var_os("CARGO_FEATURE_ASM").is_some() {
+        build.flag_if_supported("-save-temps");
+    }
+
+    if env::var_os("CARGO_FEATURE_NO_OPT_ARCH").is_none() && target_arch == "arm64" {
+        build.flag_if_supported("/arch:armv8.1");
+    }
+
+    if env::var_os("CARGO_FEATURE_SKIP_COLLECT_ON_EXIT").is_some() {
+        build.define("MI_SKIP_COLLECT_ON_EXIT", "1");
+    }
+
+    // Remove heavy debug assertions etc
+    let profile = std::env::var("PROFILE").unwrap();
+    match profile.as_str() {
+        "debug" => build.define("MI_DEBUG_FULL", "3"),
+        "release" => build.define("MI_DEBUG_FULL", "0").define("MI_DEBUG", "0"),
+        _ => build.define("MI_DEBUG_FULL", "3"),
+    };
+
+    if build.get_compiler().is_like_msvc() {
+        build.cpp(true);
+    }
+
+    const LIBS: [&str; 5] = ["psapi", "shell32", "user32", "advapi32", "bcrypt"];
+
+    for lib in LIBS {
+        println!("cargo:rustc-link-lib={}", lib);
+    }
+
+    if features.contains(&"crt-static".to_string()) {
+        build.static_crt(true);
+    }
+
+    build.compile("mimalloc_safe_static");
 }

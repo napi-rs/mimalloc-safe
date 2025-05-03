@@ -25,6 +25,7 @@ travis-ci = { repository = "purpleprotocol/mimalloc_rust" }
 libmimalloc-sys2 = { path = "libmimalloc-sys", version = "0.1.47", default-features = false }
 
 [features]
+asm = ["libmimalloc-sys2/asm"]
 default = []
 secure = ["libmimalloc-sys2/secure"]
 override = ["libmimalloc-sys2/override"]

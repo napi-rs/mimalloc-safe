@@ -192,6 +192,13 @@ jobs:
             export CC=clang
             yarn build --target ${{ matrix.settings.target }} --use-napi-cross
             yarn build --target ${{ matrix.settings.target }} --use-napi-cross --release
+          elif [[ "${{ matrix.settings.target }}" == *"msvc"* ]]; then
+            yarn build --target ${{ matrix.settings.target }}
+            yarn build --target ${{ matrix.settings.target }} --release
+            mkdir -p .cargo
+            echo "[target.${{ matrix.settings.target }}]" >> .cargo/config.toml
+            echo "rustflags = [\"-C\", \"target-feature=+crt-static\"]" >> .cargo/config.toml
+            yarn build --target ${{ matrix.settings.target }} --release
           else
             yarn build --target ${{ matrix.settings.target }}
             yarn build --target ${{ matrix.settings.target }} --release
