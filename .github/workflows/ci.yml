@@ -53,7 +53,7 @@ jobs:
 
       - name: Test libmimalloc-sys crate bindings (no secure)
         run: cargo run -p libmimalloc-sys-test
-        
+
       - name: Build (extended)
         run: cargo build --features extended
 
@@ -141,7 +141,7 @@ jobs:
             target: wasm32-wasip1-threads
 
     runs-on: ${{ matrix.settings.host }}
-    
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -153,8 +153,8 @@ jobs:
       - uses: goto-bus-stop/setup-zig@v2
         if: ${{ contains(matrix.settings.target, 'musl') }}
         with:
-          version: 0.14.0
-      
+          version: 0.14.1
+
       - name: Install cargo-zigbuild
         uses: taiki-e/install-action@v2
         if: ${{ contains(matrix.settings.target, 'musl') }}
