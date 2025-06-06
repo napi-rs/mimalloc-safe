@@ -8,8 +8,8 @@ publish = false
 crate-type = ["cdylib", "lib"]
 
 [dependencies]
-napi = "3.0.0-alpha"
-napi-derive = "3.0.0-alpha"
+napi = "3.0.0-beta"
+napi-derive = "3.0.0-beta"
 
 [target.'cfg(target_os = "linux")'.dependencies]
 mimalloc-safe = { path = "../", features = ["local_dynamic_tls", "skip_collect_on_exit"] }
