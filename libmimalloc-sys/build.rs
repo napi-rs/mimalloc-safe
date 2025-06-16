@@ -48,7 +48,9 @@ fn main() {
     }
 
     if env::var_os("CARGO_FEATURE_NO_OPT_ARCH").is_some() {
-        cmake_config.define("MI_OPT_ARCH", "OFF");
+        cmake_config
+            .define("MI_OPT_ARCH", "OFF")
+            .define("MI_NO_OPT_ARCH", "ON");
     }
 
     if profile == "debug" {
