@@ -188,8 +188,8 @@ jobs:
             yarn build --target ${{ matrix.settings.target }} -x
             yarn build --target ${{ matrix.settings.target }} -x --release
           elif [[ "${{ matrix.settings.target }}" == *"gnu"* ]]; then
-            export CFLAGS="-fuse-ld=lld"
-            export CC=clang
+            export TARGET_CFLAGS="-fuse-ld=lld"
+            export TARGET_CC=clang
             yarn build --target ${{ matrix.settings.target }} --use-napi-cross
             yarn build --target ${{ matrix.settings.target }} --use-napi-cross --release
           elif [[ "${{ matrix.settings.target }}" == *"msvc"* ]]; then

@@ -29,7 +29,7 @@ fn main() {
                 // and then uses `mi_some_fun *arg` as argument types, which
                 // appears to upset ctest, which would prefer function pointers
                 // be declared as pointers, so we clean things up for it.
-                t if t.ends_with("_fun") => format!("{}*", t),
+                t if t.ends_with("_fun") => format!("{t}*"),
 
                 t => t.to_string(),
             }

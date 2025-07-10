@@ -40,7 +40,7 @@ fn main() {
 
     if env::var_os("CARGO_FEATURE_SECURE").is_some() {
         cmake_config.define("MI_SECURE", "ON");
-        mimalloc_base_name = Cow::Owned(format!("{}-secure", mimalloc_base_name));
+        mimalloc_base_name = Cow::Owned(format!("{mimalloc_base_name}-secure"));
     }
 
     if env::var_os("CARGO_FEATURE_ETW").is_some() {
@@ -57,7 +57,7 @@ fn main() {
         cmake_config
             .define("MI_DEBUG_FULL", "ON")
             .define("MI_SHOW_ERRORS", "ON");
-        mimalloc_base_name = Cow::Owned(format!("{}-debug", mimalloc_base_name));
+        mimalloc_base_name = Cow::Owned(format!("{mimalloc_base_name}-debug"));
     }
 
     if target_env == "musl" {
@@ -97,7 +97,7 @@ fn main() {
 
     println!("cargo:rustc-link-search=native={}/build", dst.display());
 
-    println!("cargo:rustc-link-lib=static={}", mimalloc_base_name);
+    println!("cargo:rustc-link-lib=static={mimalloc_base_name}");
 
     // on armv6 we need to link with libatomic
     if target_os == "linux" && target_arch == "arm" {
@@ -105,7 +105,7 @@ fn main() {
         // For instance, on certain platforms, llvm has relocated the atomic of the arm32 architecture to libclang_rt.builtins.a
         // while some use libatomic.a, and others use libatomic_ops.a.
         let atomic_name = env::var("DEP_ATOMIC").unwrap_or("atomic".to_owned());
-        println!("cargo:rustc-link-lib={}", atomic_name);
+        println!("cargo:rustc-link-lib={atomic_name}");
     }
 }
 
@@ -164,7 +164,7 @@ fn build_mimalloc_win() {
     const LIBS: [&str; 5] = ["psapi", "shell32", "user32", "advapi32", "bcrypt"];
 
     for lib in LIBS {
-        println!("cargo:rustc-link-lib={}", lib);
+        println!("cargo:rustc-link-lib={lib}");
     }
 
     if features.contains(&"crt-static".to_string()) {
