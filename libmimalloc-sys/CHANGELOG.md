@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.50](https://github.com/napi-rs/mimalloc-safe/compare/libmimalloc-sys2-v0.1.49...libmimalloc-sys2-v0.1.50) - 2025-07-10
+
+### <!-- 0 -->Features
+
+- *(sys)* upgrade mimalloc to v2.2.4 ([#24](https://github.com/napi-rs/mimalloc-safe/pull/24))
+
 ## [0.1.49](https://github.com/napi-rs/mimalloc-safe/compare/libmimalloc-sys2-v0.1.48...libmimalloc-sys2-v0.1.49) - 2025-06-16
 
 ### <!-- 1 -->Bug Fixes
