@@ -5,7 +5,7 @@
     "build": "napi build"
   },
   "devDependencies": {
-    "@napi-rs/cli": "canary"
+    "@napi-rs/cli": "^3.0.1"
   },
   "packageManager": "yarn@4.9.2"
 }
