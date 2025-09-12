@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.1.55] - 2025-09-12
+
+### Chore
+
+- Upgrade NAPI-RS to 3.0 stable ([#26](https://github.com/napi-rs/mimalloc-safe/pull/26))
+- *(deps)* Update dependency @napi-rs/cli to v3.0.4 ([#28](https://github.com/napi-rs/mimalloc-safe/pull/28))
+- *(deps)* Update dependency @napi-rs/cli to v3.1.3 ([#29](https://github.com/napi-rs/mimalloc-safe/pull/29))
+- *(deps)* Update dependency @napi-rs/cli to v3.1.4 ([#31](https://github.com/napi-rs/mimalloc-safe/pull/31))
+- *(deps)* Update actions/checkout action to v5 ([#30](https://github.com/napi-rs/mimalloc-safe/pull/30))
+- *(deps)* Update actions/setup-node action to v5 ([#34](https://github.com/napi-rs/mimalloc-safe/pull/34))
+- *(deps)* Update yarn to v4.9.4 ([#33](https://github.com/napi-rs/mimalloc-safe/pull/33))
+- *(deps)* Update dependency @napi-rs/cli to v3.1.5 ([#32](https://github.com/napi-rs/mimalloc-safe/pull/32))
+- *(deps)* Update dependency @napi-rs/cli to v3.2.0 ([#35](https://github.com/napi-rs/mimalloc-safe/pull/35))
 
 ## [0.1.54](https://github.com/napi-rs/mimalloc-safe/compare/mimalloc-safe-v0.1.53...mimalloc-safe-v0.1.54) - 2025-07-10
 
