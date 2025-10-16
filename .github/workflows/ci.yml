@@ -45,6 +45,9 @@ jobs:
       - name: Test libmimalloc-sys crate bindings (secure)
         run: cargo run --features secure -p libmimalloc-sys-test
 
+      - name: Test libmimalloc-sys crate bindings (v3)
+        run: cargo run --features v3 -p libmimalloc-sys-test
+
       - name: Build (no secure)
         run: cargo build
 
@@ -59,6 +62,12 @@ jobs:
 
       - name: Test (extended)
         run: cargo test --features extended
+
+      - name: Test (v3)
+        run: cargo test --features v3
+
+      - name: Test (extended, v3)
+        run: cargo test --features extended,v3
 
       - name: Test libmimalloc-sys crate bindings (extended)
         run: cargo run --features extended -p libmimalloc-sys-test
@@ -153,7 +162,7 @@ jobs:
       - uses: goto-bus-stop/setup-zig@v2
         if: ${{ contains(matrix.settings.target, 'musl') }}
         with:
-          version: 0.14.1
+          version: 0.15.2
 
       - name: Install cargo-zigbuild
         uses: taiki-e/install-action@v2
@@ -187,19 +196,31 @@ jobs:
           if [[ "${{ matrix.settings.target }}" == *"musl"* ]]; then
             yarn build --target ${{ matrix.settings.target }} -x
             yarn build --target ${{ matrix.settings.target }} -x --release
+            yarn build --target ${{ matrix.settings.target }} -x --features v3
+            yarn build --target ${{ matrix.settings.target }} -x --features v3 --release
           elif [[ "${{ matrix.settings.target }}" == *"gnu"* ]]; then
             export TARGET_CFLAGS="-fuse-ld=lld"
             export TARGET_CC=clang
             yarn build --target ${{ matrix.settings.target }} --use-napi-cross
             yarn build --target ${{ matrix.settings.target }} --use-napi-cross --release
+            yarn build --target ${{ matrix.settings.target }} --use-napi-cross --features v3
+            yarn build --target ${{ matrix.settings.target }} --use-napi-cross --features v3 --release
           elif [[ "${{ matrix.settings.target }}" == *"msvc"* ]]; then
             yarn build --target ${{ matrix.settings.target }}
             yarn build --target ${{ matrix.settings.target }} --release
+            yarn build --target ${{ matrix.settings.target }} --features v3
+            yarn build --target ${{ matrix.settings.target }} --features v3 --release
             mkdir -p .cargo
             echo "[target.${{ matrix.settings.target }}]" >> .cargo/config.toml
             echo "rustflags = [\"-C\", \"target-feature=+crt-static\"]" >> .cargo/config.toml
             yarn build --target ${{ matrix.settings.target }} --release
+            yarn build --target ${{ matrix.settings.target }} --features v3 --release
+          elif [[ "${{ matrix.settings.target }}" == *"wasm"* ]]; then
+            yarn build --target ${{ matrix.settings.target }}
+            yarn build --target ${{ matrix.settings.target }} --release
           else
             yarn build --target ${{ matrix.settings.target }}
             yarn build --target ${{ matrix.settings.target }} --release
+            yarn build --target ${{ matrix.settings.target }} --features v3
+            yarn build --target ${{ matrix.settings.target }} --features v3 --release
           fi
