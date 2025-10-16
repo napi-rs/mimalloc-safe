@@ -34,5 +34,5 @@ no_thp = ["libmimalloc-sys2/no_thp"]
 no_opt_arch = ["libmimalloc-sys2/no_opt_arch"]
 extended = ["libmimalloc-sys2/extended"]
 skip_collect_on_exit = ["libmimalloc-sys2/skip_collect_on_exit"]
-
 etw = ["libmimalloc-sys2/etw"]
+v3 = ["libmimalloc-sys2/v3"]

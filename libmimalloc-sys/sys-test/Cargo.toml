@@ -2,7 +2,7 @@
 name = "libmimalloc-sys-test"
 version = "0.1.0"
 authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
-edition = "2018"
+edition = "2021"
 description = "Bindings test for libmimalloc-sys"
 license = "MIT"
 publish = false
@@ -10,6 +10,7 @@ publish = false
 [features]
 secure = ["libmimalloc-sys2/secure"]
 extended = ["libmimalloc-sys2/extended"]
+v3 = ["libmimalloc-sys2/v3"]
 
 [dependencies]
 libmimalloc-sys2 = { path = "..", features = ["extended"] }

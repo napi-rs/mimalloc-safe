@@ -7,6 +7,9 @@ publish = false
 [lib]
 crate-type = ["cdylib", "lib"]
 
+[features]
+v3 = ["mimalloc-safe/v3"]
+
 [dependencies]
 napi = "3"
 napi-derive = "3"

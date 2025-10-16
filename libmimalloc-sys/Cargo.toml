@@ -38,6 +38,7 @@ no_thp = []
 skip_collect_on_exit = []
 # turn off `MI_OPT_ARCH`, default is `ON`
 no_opt_arch = []
+v3 = []
 
 # Show `extended` on docs.rs since it's the full API surface.
 [package.metadata.docs.rs]

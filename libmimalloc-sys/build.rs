@@ -4,7 +4,10 @@ use std::env;
 use cmake::Config;
 
 fn main() {
+    #[cfg(not(feature = "v3"))]
     let mut cmake_config = Config::new("c_src/mimalloc");
+    #[cfg(feature = "v3")]
+    let mut cmake_config = Config::new("c_src/mimalloc3");
 
     let mut mimalloc_base_name = Cow::Borrowed("mimalloc");
 
