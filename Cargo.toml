@@ -1,6 +1,6 @@
 [package]
 name = "mimalloc-safe"
-version = "0.1.55"
+version = "0.1.56"
 authors = [
     "Octavian Oncescu <octavonce@gmail.com>",
     "Vincent Rouillé <vincent@speedy37.fr>",
