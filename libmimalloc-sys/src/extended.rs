@@ -311,6 +311,7 @@ extern "C" {
     /// Note: This function is thread safe.
     pub fn mi_stats_reset();
 
+    #[cfg(not(feature = "v3"))]
     /// Merge thread local statistics with the main statistics and reset.
     ///
     /// Note: This function is thread safe.
@@ -590,8 +591,12 @@ pub const mi_option_target_segments_per_thread: mi_option_t = 35;
 /// Option (experimental)
 pub const mi_option_generic_collect: mi_option_t = 36;
 
+/// Allow transparent huge pages? (=1) (on Android =0 by default).
+/// Set to 0 to disable THP for the process.
+pub const mi_option_allow_thp: mi_option_t = 37;
+
 /// Last option.
-pub const _mi_option_last: mi_option_t = 37;
+pub const _mi_option_last: mi_option_t = 38;
 
 extern "C" {
     // Note: mi_option_{enable,disable} aren't exposed because they're redundant
@@ -746,14 +751,17 @@ extern "C" {
     /// heap.
     pub fn mi_heap_destroy(heap: *mut mi_heap_t);
 
+    #[cfg(not(feature = "v3"))]
     /// Set the default heap to use for [`mi_malloc`](crate::mi_malloc) et al.
     ///
     /// Returns the previous default heap.
     pub fn mi_heap_set_default(heap: *mut mi_heap_t) -> *mut mi_heap_t;
 
+    #[cfg(not(feature = "v3"))]
     /// Get the default heap that is used for [`mi_malloc`](crate::mi_malloc) et al.
     pub fn mi_heap_get_default() -> *mut mi_heap_t;
 
+    #[cfg(not(feature = "v3"))]
     /// Get the backing heap.
     ///
     /// The _backing_ heap is the initial default heap for a thread and always
@@ -946,6 +954,7 @@ extern "C" {
         offset: usize,
     ) -> *mut c_void;
 
+    #[cfg(not(feature = "v3"))]
     /// Does a heap contain a pointer to a previously allocated block?
     ///
     /// `p` must be a pointer to a previously allocated block (in any heap) -- it cannot be some
@@ -956,6 +965,7 @@ extern "C" {
     /// See [`mi_heap_check_owned`].
     pub fn mi_heap_contains_block(heap: *mut mi_heap_t, p: *const c_void) -> bool;
 
+    #[cfg(not(feature = "v3"))]
     /// Check safely if any pointer is part of a heap.
     ///
     /// `p` may be any pointer -- not required to be previously allocated by the
@@ -968,6 +978,7 @@ extern "C" {
     /// [`mi_is_in_heap_region`]
     pub fn mi_heap_check_owned(heap: *mut mi_heap_t, p: *const c_void) -> bool;
 
+    #[cfg(not(feature = "v3"))]
     /// Check safely if any pointer is part of the default heap of this thread.
     ///
     /// `p` may be any pointer -- not required to be previously allocated by the
