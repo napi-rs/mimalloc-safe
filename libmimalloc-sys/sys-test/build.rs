@@ -9,6 +9,16 @@ fn main() {
         .fn_cname(|rust, link_name| link_name.unwrap_or(rust).to_string())
         // ignore whether or not the option enum is signed.
         .skip_signededness(|c| c.ends_with("_t") || c.ends_with("_e"))
+        .skip_fn(|c| {
+            cfg!(feature = "v3")
+                && (c.ends_with("mi_check_owned")
+                    || c.ends_with("heap_check_owned")
+                    || c.ends_with("mi_heap_contains_block")
+                    || c.ends_with("mi_heap_get_backing")
+                    || c.ends_with("mi_heap_get_default")
+                    || c.ends_with("mi_heap_set_default")
+                    || c.ends_with("mi_stats_merge"))
+        })
         .type_name(|ty, _is_struct, _is_union| {
             match ty {
                 // Special cases. We do this to avoid having both
