@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.1.56] - 2026-01-11
+
+### Features
+
+- Upgrade mimalloc ([#48](https://github.com/napi-rs/mimalloc-safe/pull/48))
+
+### Chore
+
+- *(deps)* Update dependency node to v24 ([#42](https://github.com/napi-rs/mimalloc-safe/pull/42))
+- *(deps)* Update dependency @napi-rs/cli to v3.5.0 ([#46](https://github.com/napi-rs/mimalloc-safe/pull/46))
+- *(deps)* Update actions/checkout action to v6 ([#45](https://github.com/napi-rs/mimalloc-safe/pull/45))
+- *(deps)* Update yarn to v4.12.0 ([#43](https://github.com/napi-rs/mimalloc-safe/pull/43))
+- *(deps)* Update dependency @napi-rs/cli to v3.5.1 ([#47](https://github.com/napi-rs/mimalloc-safe/pull/47))
 ## [0.1.55] - 2025-10-16
 
 ### Features
