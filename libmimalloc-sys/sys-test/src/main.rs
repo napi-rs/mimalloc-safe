@@ -1,4 +1,4 @@
-#![allow(bad_style, clippy::all)]
+#![allow(bad_style, clippy::all, function_casts_as_integer)]
 
 use libmimalloc_sys2::*;
 
