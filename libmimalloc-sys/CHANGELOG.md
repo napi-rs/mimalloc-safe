@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.1.53] - 2026-04-16
+
+### Bug Fixes
+
+- Allow function_casts_as_integer lint in sys-test ([#52](https://github.com/napi-rs/mimalloc-safe/pull/52))
+
+### Chore
+
+- Update mimalloc submodules to v2.3.0 and v3.3.0 ([#54](https://github.com/napi-rs/mimalloc-safe/pull/54))
 ## [0.1.52] - 2026-01-11
 
 ### Features
