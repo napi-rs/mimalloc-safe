@@ -1,4 +1,3 @@
-use std::borrow::Cow;
 use std::env;
 
 use cmake::Config;
@@ -8,8 +7,6 @@ fn main() {
     let mut cmake_config = Config::new("c_src/mimalloc");
     #[cfg(feature = "v3")]
     let mut cmake_config = Config::new("c_src/mimalloc3");
-
-    let mut mimalloc_base_name = Cow::Borrowed("mimalloc");
 
     cmake_config
         .define("MI_BUILD_STATIC", "ON")
@@ -41,9 +38,9 @@ fn main() {
         cmake_config.define("MI_SKIP_COLLECT_ON_EXIT", "ON");
     }
 
-    if env::var_os("CARGO_FEATURE_SECURE").is_some() {
+    let secure = env::var_os("CARGO_FEATURE_SECURE").is_some();
+    if secure {
         cmake_config.define("MI_SECURE", "ON");
-        mimalloc_base_name = Cow::Owned(format!("{mimalloc_base_name}-secure"));
     }
 
     if env::var_os("CARGO_FEATURE_ETW").is_some() {
@@ -60,7 +57,6 @@ fn main() {
         cmake_config
             .define("MI_DEBUG_FULL", "ON")
             .define("MI_SHOW_ERRORS", "ON");
-        mimalloc_base_name = Cow::Owned(format!("{mimalloc_base_name}-debug"));
     }
 
     if target_env == "musl" {
@@ -96,11 +92,27 @@ fn main() {
         cmake_config.define("MI_DEBUG_FULL", "OFF");
     }
 
+    // replicate naming logic from https://github.com/microsoft/mimalloc/blob/0ddf397796fbefa35b3278bd4431c2913a9892eb/CMakeLists.txt#L595-L599
+    let profile_suffix = match cmake_config.get_profile() {
+        p if p.eq_ignore_ascii_case("release")
+            || p.eq_ignore_ascii_case("relwithdebinfo")
+            || p.eq_ignore_ascii_case("minsizerel")
+            || p.eq_ignore_ascii_case("none") =>
+        {
+            None
+        }
+        p => Some(format!("-{}", p.to_ascii_lowercase())),
+    };
+
     let dst = cmake_config.build();
 
     println!("cargo:rustc-link-search=native={}/build", dst.display());
 
-    println!("cargo:rustc-link-lib=static={mimalloc_base_name}");
+    println!(
+        "cargo:rustc-link-lib=static=mimalloc{}{}",
+        if secure { "-secure" } else { "" },
+        profile_suffix.as_deref().unwrap_or("")
+    );
 
     // on armv6 we need to link with libatomic
     if target_os == "linux" && target_arch == "arm" {
