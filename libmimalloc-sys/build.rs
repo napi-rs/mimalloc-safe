@@ -144,7 +144,7 @@ fn build_mimalloc_win() {
         .include("./c_src/mimalloc/src")
         .file("./c_src/mimalloc/src/static.c")
         .define("MI_BUILD_SHARED", "0")
-        .cpp(false)
+        .cpp(true)
         .warnings(false)
         .flag_if_supported("-w");
 
@@ -172,8 +172,17 @@ fn build_mimalloc_win() {
         _ => build.define("MI_DEBUG_FULL", "3"),
     };
 
+    // Force the .c source to be compiled as C++ (equivalent to mimalloc upstream's
+    // `MI_USE_CXX=ON`). The C-mode `_MSC_VER` branch in `atomic.h` references
+    // MSVC-only ARM64 intrinsics (`__ldar64`/`__stlr64`) that clang does not
+    // declare, so `aarch64-pc-windows-msvc` builds fail under `TARGET_CC=clang`.
+    // Compiling as C++ takes the `<atomic>` path and avoids that branch entirely.
+    // `cpp(true)` alone is insufficient because cc-rs does not inject `/TP` or
+    // `-x c++`; the language must be forced explicitly.
     if build.get_compiler().is_like_msvc() {
-        build.cpp(true);
+        build.flag("/TP");
+    } else {
+        build.flag("-xc++");
     }
 
     const LIBS: [&str; 5] = ["psapi", "shell32", "user32", "advapi32", "bcrypt"];
