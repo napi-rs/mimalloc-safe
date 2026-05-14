@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.1.56] - 2026-05-14
+
+### Bug Fixes
+
+- *(sys)* Compile mimalloc as C++ on windows-msvc targets ([#65](https://github.com/napi-rs/mimalloc-safe/pull/65))
 ## [0.1.55] - 2026-05-09
 
 ### Chore
