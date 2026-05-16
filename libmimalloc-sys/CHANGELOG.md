@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.1.57] - 2026-05-16
+
+### Bug Fixes
+
+- *(sys)* Disable mimalloc v3 FIXED_SLOT TLS on Apple targets ([#67](https://github.com/napi-rs/mimalloc-safe/pull/67))
+- *(sys)* Route Windows MSVC build to v3 source when v3 feature is on ([#68](https://github.com/napi-rs/mimalloc-safe/pull/68))
 ## [0.1.56] - 2026-05-14
 
 ### Bug Fixes
