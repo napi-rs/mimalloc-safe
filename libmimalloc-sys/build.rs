@@ -168,10 +168,20 @@ fn build_mimalloc_win() {
     let mut build = cc::Build::new();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").expect("target_arch not defined!");
 
+    // Route to the v3 source tree when the `v3` feature is enabled,
+    // mirroring the cmake branch above. Both trees expose `src/static.c`
+    // as a single translation unit that pulls in all the platform .c
+    // files, so the cc-rs single-file build pattern works for either.
+    let source_dir = if env::var_os("CARGO_FEATURE_V3").is_some() {
+        "./c_src/mimalloc3"
+    } else {
+        "./c_src/mimalloc"
+    };
+
     build
-        .include("./c_src/mimalloc/include")
-        .include("./c_src/mimalloc/src")
-        .file("./c_src/mimalloc/src/static.c")
+        .include(format!("{source_dir}/include"))
+        .include(format!("{source_dir}/src"))
+        .file(format!("{source_dir}/src/static.c"))
         .define("MI_BUILD_SHARED", "0")
         .cpp(true)
         .warnings(false)
