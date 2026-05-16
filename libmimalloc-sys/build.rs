@@ -76,6 +76,35 @@ fn main() {
         cmake_config.define("MI_LOCAL_DYNAMIC_TLS", "ON");
     }
 
+    // On Apple targets, mimalloc v3's `prim.h` selects
+    // `MI_TLS_MODEL_FIXED_SLOT` and hardcodes the per-thread `theap`
+    // pointer at TCB[108]/[109], reading/writing the slot directly
+    // through `tpidrro_el0` (arm64) or `%gs:` (x86_64) rather than
+    // through `pthread_setspecific`. The slot numbers are not allocated
+    // via `pthread_key_create`; the same header notes the caveat:
+    // "This goes wrong though if the OS or a library uses the same
+    // fixed slot."
+    //
+    // When a process loads more than one image that statically links
+    // mimalloc-safe (e.g. two napi addons in one Node.js process),
+    // each image has its own mimalloc state but every image's
+    // `_mi_theap_default()` reads and writes the same TCB[108] on any
+    // given thread — the instances overwrite each other's pointers.
+    //
+    // `-DMI_HAS_TLS_SLOT=0` makes the cascade in `prim.h` skip the
+    // FIXED_SLOT branch on Apple and fall through to
+    // `MI_TLS_MODEL_DYNAMIC_PTHREADS`, whose accessors use
+    // `pthread_{get,set}specific` with a key allocated per image via
+    // `pthread_key_create`. Different images then use distinct keys and
+    // no longer share TLS storage. `prim.h` notes this path is "a bit
+    // slower"; the impact has not been measured here.
+    //
+    // Gated on the `v3` feature: v2 has a separate Apple fast path
+    // controlled by `MI_TLS_SLOT` and is not affected by this define.
+    if target_os == "macos" && env::var_os("CARGO_FEATURE_V3").is_some() {
+        cmake_config.cflag("-DMI_HAS_TLS_SLOT=0");
+    }
+
     if (target_os == "linux" || target_os == "android")
         && env::var_os("CARGO_FEATURE_NO_THP").is_some()
     {
