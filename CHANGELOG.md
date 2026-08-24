@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.1.65] - 2026-08-24
+
+### Chore
+
+- *(deps)* Update actions/setup-node action to v7 ([#89](https://github.com/napi-rs/mimalloc-safe/pull/89))
+- *(deps)* Update yarn to v4.18.0 ([#87](https://github.com/napi-rs/mimalloc-safe/pull/87))
 ## [0.1.64] - 2026-06-24
 
 ### Chore
