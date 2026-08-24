@@ -5,9 +5,10 @@
     "build": "napi build"
   },
   "devDependencies": {
-    "@emnapi/core": "^1.11.1",
-    "@emnapi/runtime": "^1.11.1",
-    "@napi-rs/cli": "^3.7.2"
+    "@emnapi/core": "^2.0.0-alpha.4",
+    "@emnapi/runtime": "^2.0.0-alpha.4",
+    "@napi-rs/cli": "^3.8.6",
+    "emnapi": "^2.0.0-alpha.4"
   },
   "packageManager": "yarn@4.17.0"
 }
