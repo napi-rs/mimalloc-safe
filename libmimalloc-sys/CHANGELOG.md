@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.1.62] - 2026-09-04
+
+### Bug Fixes
+
+- *(sys)* Mimalloc3 v3.5.1 + fix for the process-init thread's thread-done hook ([#97](https://github.com/napi-rs/mimalloc-safe/pull/97))
+
+### Chore
+
+- *(deps)* Update mimalloc (v2) submodule to v2.5.1 ([#98](https://github.com/napi-rs/mimalloc-safe/pull/98))
 ## [0.1.61] - 2026-08-24
 
 ### Chore
