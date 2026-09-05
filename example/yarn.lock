@@ -54,11 +54,11 @@ __metadata:
   linkType: hard
 
 "@emnapi/runtime@npm:^2.0.0-alpha.4":
-  version: 2.0.0-alpha.4
-  resolution: "@emnapi/runtime@npm:2.0.0-alpha.4"
+  version: 2.0.0-alpha.5
+  resolution: "@emnapi/runtime@npm:2.0.0-alpha.5"
   dependencies:
     tslib: "npm:^2.4.0"
-  checksum: 10c0/94276f55a686b56678f15edb6bdd6f960c276a3b712f4e3cf89bc54ab66deef541060297d7110838c876d52c21d0b8931ec60d7ee11a2280734cf3821f2d6490
+  checksum: 10c0/0effd9cc76cb7d65d38d4fc30b0d4599bd6c96abbfe334d10f7739e69e95f3e465d4243019931a0d7ae682ba42420b0170b87b341ea410e700343f5002704ec9
   languageName: node
   linkType: hard
 
