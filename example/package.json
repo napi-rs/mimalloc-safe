@@ -10,5 +10,5 @@
     "@napi-rs/cli": "^3.9.1",
     "emnapi": "^2.0.0-alpha.5"
   },
-  "packageManager": "yarn@4.18.0"
+  "packageManager": "yarn@4.18.1"
 }
