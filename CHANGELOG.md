@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.1.68] - 2026-10-24
+
+### Features
+
+- *(sys)* Add free_use_pagemap feature ([#109](https://github.com/napi-rs/mimalloc-safe/pull/109))
+
+### Bug Fixes
+
+- *(ci)* Locate armv7 GCC runtime when using Clang ([#111](https://github.com/napi-rs/mimalloc-safe/pull/111))
+
+### Chore
+
+- *(deps)* Update mimalloc3 to v3.6.0 ([#110](https://github.com/napi-rs/mimalloc-safe/pull/110))
+- *(deps)* Update emnapi to v2.0.0-beta.2 ([#108](https://github.com/napi-rs/mimalloc-safe/pull/108))
+- *(deps)* Update yarn to v4.18.1 ([#107](https://github.com/napi-rs/mimalloc-safe/pull/107))
+- *(deps)* Update dependency @napi-rs/cli to v3.10.9 ([#103](https://github.com/napi-rs/mimalloc-safe/pull/103))
+- *(deps)* Update dependency @napi-rs/cli to v3.10.9 ([#114](https://github.com/napi-rs/mimalloc-safe/pull/114))
 ## [0.1.67] - 2026-09-14
 
 ### Chore
