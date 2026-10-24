@@ -85,6 +85,12 @@ fn main() {
         cmake_config.define("MI_TLS_MODEL", "PTHREADS");
     }
 
+    // Android has execinfo.h even below API 33, where backtrace is unavailable.
+    // Avoid v3.6.0's header-only detection and use its profiling fallback.
+    if env::var_os("CARGO_FEATURE_V3").is_some() && target_os == "android" {
+        cmake_config.define("MI_HAS_EXECINFOH", "OFF");
+    }
+
     if (target_os == "linux" || target_os == "android")
         && env::var_os("CARGO_FEATURE_NO_THP").is_some()
     {
