@@ -38,6 +38,9 @@ no_thp = []
 skip_collect_on_exit = []
 # turn off `MI_OPT_ARCH`, default is `ON`
 no_opt_arch = []
+# v3 only: always look up the page map in `mi_free`. Lifts the 256 MiB cap on
+# arena-backed objects that v3.5 introduced with aligned page metadata.
+free_use_pagemap = []
 v3 = []
 
 # Show `extended` on docs.rs since it's the full API surface.

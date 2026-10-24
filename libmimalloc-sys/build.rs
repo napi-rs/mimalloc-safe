@@ -53,6 +53,10 @@ fn main() {
             .define("MI_NO_OPT_ARCH", "ON");
     }
 
+    if env::var_os("CARGO_FEATURE_FREE_USE_PAGEMAP").is_some() {
+        cmake_config.define("MI_FREE_USE_PAGEMAP", "ON");
+    }
+
     if profile == "debug" {
         cmake_config
             .define("MI_DEBUG_FULL", "ON")
@@ -187,6 +191,10 @@ fn build_mimalloc_win() {
 
     if env::var_os("CARGO_FEATURE_SKIP_COLLECT_ON_EXIT").is_some() {
         build.define("MI_SKIP_COLLECT_ON_EXIT", "1");
+    }
+
+    if env::var_os("CARGO_FEATURE_FREE_USE_PAGEMAP").is_some() {
+        build.define("MI_FREE_USE_PAGEMAP", "1");
     }
 
     // Remove heavy debug assertions etc
