@@ -201,6 +201,10 @@ jobs:
           elif [[ "${{ matrix.settings.target }}" == *"gnu"* ]]; then
             export TARGET_CFLAGS="-fuse-ld=lld"
             export TARGET_CC=clang
+            if [[ "${{ matrix.settings.target }}" == "armv7-unknown-linux-gnueabihf" ]]; then
+              # Clang's arm target aliases omit napi-cross's armv7 GCC triple.
+              export TARGET_CFLAGS="$TARGET_CFLAGS --gcc-triple=armv7-unknown-linux-gnueabihf"
+            fi
             yarn build --target ${{ matrix.settings.target }} --use-napi-cross
             yarn build --target ${{ matrix.settings.target }} --use-napi-cross --release
             yarn build --target ${{ matrix.settings.target }} --use-napi-cross --features v3
