@@ -78,15 +78,11 @@ fn main() {
 
     // On macOS, mimalloc v3 defaults to a fixed TLS slot (TCB[108]/[109]) shared by
     // every image, so a second statically-linked copy (e.g. another napi addon)
-    // adopts the first's per-thread heap and crashes. Force the thread-local model
-    // so each image gets its own `__thread` storage (a v3-only cmake option from
-    // microsoft/mimalloc b83dee64, issue #1301).
+    // adopts the first's per-thread heap and crashes. Use per-image pthread keys
+    // to keep the heaps isolated. Unlike LOCAL TLS, these remain available during
+    // thread teardown, when v3.6.0 releases the cached theap's reference.
     if env::var_os("CARGO_FEATURE_V3").is_some() && target_os == "macos" {
-        cmake_config
-            .define("MI_TLS_MODEL_LOCAL", "ON")
-            // macOS may allocate on a thread-local's first access; guard against
-            // re-entering malloc until the process is initialized.
-            .define("MI_TLS_RECURSE_GUARD", "ON");
+        cmake_config.define("MI_TLS_MODEL", "PTHREADS");
     }
 
     if (target_os == "linux" || target_os == "android")
