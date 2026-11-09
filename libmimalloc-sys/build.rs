@@ -94,11 +94,9 @@ fn main() {
     }
 
     // Android has execinfo.h even below API 33, where backtrace is unavailable.
-    // NDK 30 also ships LLVM's libunwind.h, which does not declare unw_backtrace.
-    // Avoid v3.6.0's header-only detection and use its profiling fallback.
+    // Skip it so v3 checks for `_Unwind_Backtrace` from unwind.h instead.
     if env::var_os("CARGO_FEATURE_V3").is_some() && target_os == "android" {
         cmake_config.define("MI_HAS_EXECINFOH", "OFF");
-        cmake_config.define("MI_HAS_LIBUNWINDH", "OFF");
     }
 
     if (target_os == "linux" || target_os == "android")
