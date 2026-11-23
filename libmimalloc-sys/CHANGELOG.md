@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.1.67] - 2026-11-23
+
+### Chore
+
+- *(deps)* Update mimalloc to v2.5.3 and mimalloc3 to v3.7.0 ([#126](https://github.com/napi-rs/mimalloc-safe/pull/126))
 ## [0.1.66] - 2026-11-09
 
 ### Bug Fixes
