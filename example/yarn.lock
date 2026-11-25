@@ -275,8 +275,8 @@ __metadata:
   linkType: hard
 
 "@napi-rs/cli@npm:^3.9.1":
-  version: 3.10.12
-  resolution: "@napi-rs/cli@npm:3.10.12"
+  version: 3.11.1
+  resolution: "@napi-rs/cli@npm:3.11.1"
   dependencies:
     "@inquirer/prompts": "npm:^8.7.5"
     "@napi-rs/cross-toolchain": "npm:^1.0.5"
@@ -304,7 +304,7 @@ __metadata:
   bin:
     napi: dist/cli.js
     napi-raw: cli.mjs
-  checksum: 10c0/e5d6f5ee0d04fb910ea4fb52b1faeac329f34df3c05252b3b4abb2a6f290ed774e09bbbe0ac7c01e71076ed6bc24969a76782594604a71eba4f0ba66aedf21fe
+  checksum: 10c0/dfe2b1af2ce24d0b0734b429a0ed0bf3c1652b395a27e124992147e8994fafbdf8eed4363dce551c5ced62e17682d975a1f7725ebc3fbe20514ae4050bb2c143
   languageName: node
   linkType: hard
 
